@@ -1,10 +1,13 @@
+
+// This file just shows the strucutre of an item in the card (dynmically)
 import React from 'react';
 import type { CartItem } from '../types/indexx';
 
+// These are the types of parameters that the component will take
 interface CartItemProps {
-  item: CartItem;
-  onUpdateQuantity: (id: number, quantity: number) => void;
-  onRemove: (id: number) => void;
+  item: CartItem; // The actual Item
+  onUpdateQuantity: (id: number, quantity: number) => void; // A function that specifies what will happen when the quantity is updated
+  onRemove: (id: number) => void;// A function that specifies what will happen when the itm  is removed
 }
 
 const CartItem: React.FC<CartItemProps> = ({ item, onUpdateQuantity, onRemove }) => {

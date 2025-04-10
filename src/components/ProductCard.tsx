@@ -9,7 +9,7 @@ interface productCardProps {
 const ProductCard: React.FC<productCardProps> = ({ product, onAddToCart }) => {
     return (
         <div className='w-[320px] h-auto px-1 '>
-            <img src={product.image} className="h-[300px] w-full bg-slate-50" />
+            <img src={product.image} className="h-[300px] w-full " />
             <div className="pt-3 flex justify-between">
                 <div>
                     <p className="font-bold text-orange-800">{/* Category */}{/*Lifestyle*/} {product.category}</p>

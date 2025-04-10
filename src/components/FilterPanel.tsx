@@ -21,7 +21,6 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000]);
   const [minRating, setMinRating] = useState<number>(0);
 
-  // useEffect with correct dependency to avoid stale closure
   useEffect(() => {
     onFilterChange({ selectedCategories, priceRange, minRating });
   }, [selectedCategories, priceRange, minRating, onFilterChange]);
