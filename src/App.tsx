@@ -1,7 +1,8 @@
 import React, { useState, useContext, createContext } from 'react';
 import CartItem from './components/CartItem';
-import ProductGrid from './components/ProductGrid'; // Import ProductGrid component
-import { CartItem as CartItemType, Product } from './types/indexx'; // Import both CartItem and Product
+import ProductGrid from './components/ProductGrid';
+import { CartItem as CartItemType, Product } from './types/indexx';
+import FilterPanel from './components/FilterPanel';
 
 const CartContext = createContext<{
   cart: CartItemType[];
@@ -23,7 +24,7 @@ const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [cart, setCart] = useState<CartItemType[]>([]);
 
   const addToCart = (product: Product) => {
-    const newItem: CartItemType = { ...product, quantity: 1 }; // Set default quantity of 1
+    const newItem: CartItemType = { ...product, quantity: 1 };
     setCart((prevCart) => [...prevCart, newItem]);
   };
 
@@ -33,26 +34,26 @@ const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
 
   const updateQuantity = (id: number, quantity: number) => {
     setCart((prevCart) =>
-      prevCart.map((item) =>
-        item.id === id ? { ...item, quantity } : item
-      )
+      prevCart.map((item) => (item.id === id ? { ...item, quantity } : item))
     );
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity }}>
+    <CartContext.Provider
+      value={{ cart, addToCart, removeFromCart, updateQuantity }}
+    >
       {children}
     </CartContext.Provider>
   );
 };
 
-// Sample product data (you would probably fetch this from an API or backend)
+// Sample product data
 const sampleProducts: Product[] = [
   {
     id: 1,
     name: 'T-shirt',
     price: 20.99,
-    image: 'https://via.placeholder.com/150',
+    image: '',
     category: 'Clothing',
     rating: 4.5,
     description: 'A comfortable cotton t-shirt',
@@ -61,42 +62,164 @@ const sampleProducts: Product[] = [
     id: 2,
     name: 'Laser mouse 23XX',
     price: 1999,
-    image: "https://via.placeholder.com/600/24f355",
+    image: '',
     category: 'Electronics',
     rating: 3,
     description: 'High quality mouse',
   },
-  // Add more products as needed
+  {
+    id: 3,
+    name: 'Nebula Hoodie',
+    price: 49.99,
+    image: '',
+    category: 'Clothing',
+    rating: 4.6,
+    description: 'A galaxy-themed hoodie that feels like a cloud. Great for stargazers.',
+  },
+  {
+    id: 4,
+    name: 'Quantum Earbuds',
+    price: 1599,
+    image: '',
+    category: 'Electronics',
+    rating: 4.9,
+    description: 'Earbuds with AI-powered ambient sound adjustment. Basically future tech.',
+  },
+  {
+    id: 5,
+    name: 'Retro GamePad X',
+    price: 899,
+    image: '',
+    category: 'Electronics',
+    rating: 4.5,
+    description: 'Old school look, new school power. Bluetooth gamepad for all devices.',
+  },
+  {
+    id: 6,
+    name: 'Minimalist Watch – Black Sand',
+    price: 129.99,
+    image: '',
+    category: 'Accessories',
+    rating: 4.2,
+    description: 'Timeless design meets modern movement. Pure style, no distractions.',
+  },
+  {
+    id: 7,
+    name: 'The Writer’s Journal',
+    price: 22.5,
+    image: '',
+    category: 'Stationery',
+    rating: 4.7,
+    description: 'Handcrafted vegan leather journal for writers, poets, and dreamers.',
+  },
+  {
+    id: 8,
+    name: 'Coffee Mug – Code & Caffeine',
+    price: 14.0,
+    image: '',
+    category: 'Lifestyle',
+    rating: 4.8,
+    description: 'Ceramic mug for those late-night code sprints. Debug responsibly.',
+  },
+  {
+    id: 9,
+    name: 'Firefly LED Strip (RGB)',
+    price: 499,
+    image: '',
+    category: 'Electronics',
+    rating: 4.4,
+    description: 'Set the mood. 16 million colors. Music sync. Remote controlled.',
+  },
+  {
+    id: 10,
+    name: 'Sneakers – SkyStep Edition',
+    price: 74.95,
+    image: '',
+    category: 'Clothing',
+    rating: 4.1,
+    description: 'Ultra-light sneakers made for walking on clouds... or pavement.',
+  },
+  {
+    id: 11,
+    name: 'Digital Bonsai Tree',
+    price: 159.0,
+    image: '',
+    category: 'Home Decor',
+    rating: 4.3,
+    description: 'A low-maintenance bonsai that glows gently based on your mood. Seriously.',
+  },
+  {
+    id: 12,
+    name: 'Tactical Laptop Backpack',
+    price: 89.99,
+    image: '',
+    category: 'Accessories',
+    rating: 4.6,
+    description: 'Weatherproof. Theft-proof. Looks like you mean business.',
+  },
 ];
 
-const App: React.FC = () => {
-  const { cart, addToCart, removeFromCart, updateQuantity } = useContext(CartContext);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>(sampleProducts);
+// Filter type
+interface FilterState {
+  selectedCategories: string[];
+  priceRange: [number, number];
+  minRating: number;
+}
 
-  // Handle product filtering logic (e.g., by category or price range)
-  const filterProducts = (category: string) => {
+const App: React.FC = () => {
+  const { cart, addToCart, removeFromCart, updateQuantity } =
+    useContext(CartContext);
+
+  const [filteredProducts, setFilteredProducts] =
+    useState<Product[]>(sampleProducts);
+
+  const applyFilters = (filters: FilterState) => {
+    const { selectedCategories, priceRange, minRating } = filters;
+    const filtered = sampleProducts.filter((product) => {
+      const inCategory =
+        selectedCategories.length === 0 ||
+        (product.category && selectedCategories.includes(product.category));
+      const inPriceRange =
+        product.price >= priceRange[0] && product.price <= priceRange[1];
+      const meetsRating = product.rating >= minRating;
+      return inCategory && inPriceRange && meetsRating;
+    });
+    setFilteredProducts(filtered);
+  };
+
+  const clearFilters = () => {
+    setFilteredProducts(sampleProducts);
+  };
+
+  const searchProducts = (query: string) => {
     const filtered = sampleProducts.filter((product) =>
-      product.name.toLowerCase().includes(category.toLowerCase())
+      product.name.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredProducts(filtered);
   };
 
   return (
-    <div className="container mx-auto">
-      {/* Product filtering */}
+    <div className="p-4">
       <div className="mb-4">
         <input
           type="text"
           placeholder="Search Products"
-          className="p-2 border rounded"
-          onChange={(e) => filterProducts(e.target.value)}
+          className="p-2 border rounded w-full max-w-sm"
+          onChange={(e) => searchProducts(e.target.value)}
         />
       </div>
 
-      {/* Product List - Using ProductGrid Component */}
-      <ProductGrid products={filteredProducts} onAddToCart={addToCart} />
+      <div className="flex">
+        <FilterPanel
+          categories={
+            [...new Set(sampleProducts.map((p) => p.category).filter(Boolean))] as string[]
+          }
+          onFilterChange={applyFilters}
+          onClearFilters={clearFilters}
+        />
+        <ProductGrid products={filteredProducts} onAddToCart={addToCart} />
+      </div>
 
-      {/* Cart Section */}
       <div className="mt-8">
         <h2 className="font-semibold text-xl">Your Cart</h2>
         <div>

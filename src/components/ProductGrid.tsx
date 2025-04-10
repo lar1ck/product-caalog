@@ -3,7 +3,7 @@ import ProductCard from './ProductCard';
 import {  Product } from '../types/indexx';
 
 interface ProductGridProps {
-  products: Product[]; // Update to accept Product[]
+  products: Product[]; 
   onAddToCart: (product: Product) => void;
 }
 

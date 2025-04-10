@@ -15,7 +15,7 @@ const ProductCard: React.FC<productCardProps> = ({ product, onAddToCart }) => {
                     <p className="font-bold text-orange-800">{/* Category */}{/*Lifestyle*/} {product.category}</p>
                     <p className="font-bold">{/* Product Name */}{/*Nike 930 xr*/} {product.name}</p>
                     <p className=' text-gray-600'>{/*Descrption*/}{product.description}</p>
-                    <p className="font-semibold text-gray-600">{/* Product Price */}$1,999 {product.price}</p>
+                    <p className="font-semibold text-gray-600">{/* Product Price */}${product.price}</p>
                 </div>
                 <div className="">
                     {'⭐'.repeat(Math.floor(product.rating))}

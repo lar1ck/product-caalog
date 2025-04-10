@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+// src/components/FilterPanel.tsx
+import React, { useState, useEffect } from 'react';
 
 export interface FilterState {
   selectedCategories: string[];
@@ -21,38 +22,31 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000]);
   const [minRating, setMinRating] = useState<number>(0);
 
-  // useEffect with correct dependency to avoid stale closure
+  // Send updated filters to parent whenever any filter changes
   useEffect(() => {
     onFilterChange({ selectedCategories, priceRange, minRating });
-  }, [selectedCategories, priceRange, minRating, onFilterChange]);
+  }, [selectedCategories, priceRange, minRating]);
 
-  // handle category change
-  const handleCategoryChange = useCallback((category: string) => {
+  const handleCategoryChange = (category: string) => {
     setSelectedCategories((prev) =>
       prev.includes(category)
         ? prev.filter((c) => c !== category)
         : [...prev, category]
     );
-  }, []);
-
-  // handle minimum price change
-  const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(e.target.value);
-    setPriceRange(([, max]) => [Math.min(value, max), max]);
   };
 
-  // handle maximum price change
-  const handleMaxPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'min' | 'max') => {
     const value = Number(e.target.value);
-    setPriceRange(([min]) => [min, Math.max(value, min)]);
+    setPriceRange((prev) =>
+      type === 'min' ? [value, prev[1]] : [prev[0], value]
+    );
   };
 
-  // handle clear filters
   const handleClearFilters = () => {
     setSelectedCategories([]);
     setPriceRange([0, 5000]);
     setMinRating(0);
-    onClearFilters();
+    onClearFilters(); // optional, if parent wants to reset state
   };
 
   return (
@@ -77,25 +71,24 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
       {/* Price Range Filter */}
       <div className="mb-4">
-        <h4 className="font-medium mb-2">Price Range (${priceRange[0]} - ${priceRange[1]})</h4>
-        <div className="flex flex-col gap-2 w-[200px]">
-          <label>Min</label>
+        <h4 className="font-medium">Price Range</h4>
+        <div className="flex items-center gap-2">
           <input
-            type="range"
-            min={0}
-            max={5000}
+            type="number"
             value={priceRange[0]}
-            onChange={handleMinPriceChange}
-            className="w-full"
-          />
-          <label>Max</label>
-          <input
-            type="range"
             min={0}
-            max={5000}
+            max={priceRange[1]}
+            onChange={(e) => handlePriceChange(e, 'min')}
+            className="w-20 border px-2"
+          />
+          <span>-</span>
+          <input
+            type="number"
             value={priceRange[1]}
-            onChange={handleMaxPriceChange}
-            className="w-full"
+            min={priceRange[0]}
+            max={10000}
+            onChange={(e) => handlePriceChange(e, 'max')}
+            className="w-20 border px-2"
           />
         </div>
       </div>

@@ -14,7 +14,7 @@ export interface CartItem {
     price: number;
     image: string;
     quantity: number;
-    category?: string;  // Optional field
-    rating?: number;  // Optional field
-    description?: string;  // Optional field
+    category?: string;  
+    rating?: number;  
+    description?: string;  
   }
