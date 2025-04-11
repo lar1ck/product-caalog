@@ -217,7 +217,13 @@ const App: React.FC = () => {
           onFilterChange={applyFilters}
           onClearFilters={clearFilters}
         />
+        {filteredProducts.length == 0 ? (
+          <div className='text-gray-600 pl-[300px]'>
+            No Products availble for that filter
+          </div>
+        ): (
         <ProductGrid products={filteredProducts} onAddToCart={addToCart} />
+        )}
       </div>
 
       <div className="mt-8">
