@@ -219,7 +219,7 @@ const App: React.FC = () => {
         />
         {filteredProducts.length == 0 ? (
           <div className='text-gray-600 pl-[300px]'>
-            No Products availble for that filter
+            No Products matches your filter
           </div>
         ): (
         <ProductGrid products={filteredProducts} onAddToCart={addToCart} />
