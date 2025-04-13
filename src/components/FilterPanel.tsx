@@ -55,7 +55,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   };
 
   return (
-    <div className="p-4 w-1/4 border rounded">
+    <div className="p-4 border rounded">
       <h3 className="font-semibold mb-2">Filter Products</h3>
 
       {/* Category Filter */}
