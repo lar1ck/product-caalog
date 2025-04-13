@@ -19,7 +19,7 @@ const ProductCard: React.FC<productCardProps> = ({ product, onAddToCart }) => {
                 className="cursor-pointer relative group overflow-hidden rounded-md"
             >
                 <img
-                    src={product.image || '../../public/fallback.jpg'}
+                    src={product.image || '/fallback.jpg'}
                     className="h-[300px] w-full object-cover transform group-hover:scale-105 transition-transform duration-300"
                     alt={product.name}
                 />

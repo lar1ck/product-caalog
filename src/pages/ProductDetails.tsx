@@ -29,7 +29,7 @@ const ProductDetails = () => {
       {/* Image Section */}
       <div
         style={{
-          backgroundImage: `url(${product.image || '../../public/fallback.jpg'})`,
+          backgroundImage: `url(${product.image || '/fallback.jpg'})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
