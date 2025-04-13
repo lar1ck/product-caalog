@@ -13,7 +13,7 @@ interface CartItemProps {
 const CartItem: React.FC<CartItemProps> = ({ item, onUpdateQuantity, onRemove }) => {
   return (
     <div className="flex items-center justify-between bg-white p-4 rounded-xl shadow mb-3">
-      <img src={item.image} className="w-16 h-16 object-cover rounded bg-slate-400" />
+      <img src={item.image || '../../public/fallback.jpg'} className="w-16 h-16 object-cover rounded bg-slate-400" />
       <div className="flex-1 ml-4">
         <h4 className="font-semibold text-sm">{item.name}</h4>
         <p className="text-xs text-gray-500">${item.price} × {item.quantity}</p>
